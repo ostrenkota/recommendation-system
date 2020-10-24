@@ -27,3 +27,4 @@ if __name__ == '__main__':
     result = {"user": config.variant + 1, "1": marks, "2": recommend}
     with open('result.json', 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=4)
+    print(result)

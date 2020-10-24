@@ -13,7 +13,7 @@ def sim(u, v):
     multiply = 0
     usquare = 0
     vsquare = 0
-    for i in range(1, movie_names.shape[0] + 1):
+    for i in range(1, data.shape[1]):
         ui = int(data.iloc[u][i])
         vi = int(data.iloc[v][i])
         if ui == -1 or vi == -1:
@@ -39,7 +39,7 @@ def calculate_marks():
     variant_average = calculate_average(config.variant)
 
     expected_marks = {}
-    for i in range(movies_number):
+    for i in range(1, movies_number):
         if data.iloc[config.variant][i] == -1:
             expected_marks[i] = calculate_expected_mark(i, sorted_marks, variant_average)
     return expected_marks
@@ -48,7 +48,7 @@ def calculate_marks():
 def calculate_average(v):
     sum = 0
     number = 0
-    for i in range(1, movies_number):
+    for i in range(1, data.shape[1]):
         if data.iloc[v][i] != -1:
             sum += int(data.iloc[v][i])
             number += 1
@@ -59,8 +59,9 @@ def calculate_expected_mark(film_index, similar_users_array, variant_average):
     numerator = 0
     norm = 0
     for v in range(len(similar_users_array)):
-        if data.iloc[v][film_index] == -1:
+        user = similar_users_array[v][0]
+        if data.iloc[user][film_index] == -1:
             continue
-        numerator += similar_users_array[v][1] * (data.iloc[v][film_index] - similar_users_array[v][2])
-        norm += similar_users_array[v][1]
-    return round(variant_average + (numerator / norm), 3)
+        numerator += round(similar_users_array[v][1] * (data.iloc[user][film_index] - similar_users_array[v][2]), 3)
+        norm += round(similar_users_array[v][1], 3)
+    return round(variant_average + (numerator / abs(norm)), 3)
