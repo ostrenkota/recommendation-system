@@ -4,7 +4,6 @@ from src import config
 
 
 data = pd.read_csv('resources/data.csv')
-movie_names = pd.read_csv('resources/movie_names.csv')
 marks_number = data.shape[0]
 movies_number = data.shape[1]
 
@@ -16,7 +15,7 @@ def sim(u, v):
     for i in range(1, data.shape[1]):
         ui = int(data.iloc[u][i])
         vi = int(data.iloc[v][i])
-        if ui == -1 or vi == -1:
+        if ui == config.minusOneInt or vi == config.minusOneInt:
             continue
         else:
             usquare += ui ** 2
@@ -40,7 +39,7 @@ def calculate_marks():
 
     expected_marks = {}
     for i in range(1, movies_number):
-        if data.iloc[config.variant][i] == -1:
+        if data.iloc[config.variant][i] == config.minusOneInt:
             expected_marks[i] = calculate_expected_mark(i, sorted_marks, variant_average)
     return expected_marks
 
@@ -49,7 +48,7 @@ def calculate_average(v):
     sum = 0
     number = 0
     for i in range(1, data.shape[1]):
-        if data.iloc[v][i] != -1:
+        if data.iloc[v][i] != config.minusOneInt:
             sum += int(data.iloc[v][i])
             number += 1
     return round(sum / number, 3)
@@ -60,7 +59,7 @@ def calculate_expected_mark(film_index, similar_users_array, variant_average):
     norm = 0
     for v in range(len(similar_users_array)):
         user = similar_users_array[v][0]
-        if data.iloc[user][film_index] == -1:
+        if data.iloc[user][film_index] == config.minusOneInt:
             continue
         numerator += round(similar_users_array[v][1] * (data.iloc[user][film_index] - similar_users_array[v][2]), 3)
         norm += round(similar_users_array[v][1], 3)

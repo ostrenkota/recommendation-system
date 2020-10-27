@@ -10,10 +10,10 @@ def calculate_sim(u, context):
     denominator = 0
     for i in range(1, context.shape[1]):
         if context.iloc[u][i] == context.iloc[config.variant][i] and \
-                context.iloc[u][i] != " -1" and \
-                context.iloc[config.variant][i] != " -1":
+                context.iloc[u][i] != config.minusOneStr and \
+                context.iloc[config.variant][i] != config.minusOneStr:
             numerator += 1
-        elif context.iloc[u][i] != " -1" and context.iloc[config.variant][i] != " -1":
+        elif context.iloc[u][i] != config.minusOneStr and context.iloc[config.variant][i] != config.minusOneStr:
             denominator += 1
     return round(numerator / denominator, 3)
 
@@ -32,7 +32,7 @@ def calculate_expected_data(day_or_place):
     expected_days = {}
 
     for i in range(1, context.shape[1]):
-        if context.iloc[config.variant][i] == " -1":
+        if context.iloc[config.variant][i] == config.minusOneStr:
             if day_or_place == "place":
                 expected_days[i] = calculate_probability_for_places(i, sorted_sims, context)
             elif day_or_place == "day":
@@ -44,7 +44,7 @@ def calculate_probability_for_days(film_number, sorted_sims, context):
     days_sim = {"Mon": 0, "Tue": 0, "Wed": 0, "Thu": 0, "Fri": 0, "Sat": 0, "Sun": 0}
     for i in range(len(sorted_sims)):
         key = context.iloc[sorted_sims[i][0]][film_number].strip()
-        if key != '-1':
+        if key != config.minusOneStr.strip():
             days_sim[key] += sorted_sims[i][1]
     return max(iter(days_sim), key=lambda k: days_sim[k])
 
@@ -53,6 +53,6 @@ def calculate_probability_for_places(film_number, sorted_sims, context):
     places_sim = {"c": 0, "h": 0, "v": 0}
     for i in range(len(sorted_sims)):
         key = context.iloc[sorted_sims[i][0]][film_number].strip()
-        if key != '-1':
+        if key != config.minusOneStr.strip():
             places_sim[key] += sorted_sims[i][1]
     return max(iter(places_sim), key=lambda k: places_sim[k])
